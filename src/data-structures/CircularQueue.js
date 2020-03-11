@@ -4,8 +4,8 @@
  */
 var MyCircularQueue = function(k) {
     this.size = k;
-    this.head = -1;
-    this.tail = -1;
+    this.count = 0;
+    this.head = 0;
     this.que = new Array(k);
 };
 
@@ -17,14 +17,9 @@ var MyCircularQueue = function(k) {
 MyCircularQueue.prototype.enQueue = function(value) {
     if (this.isFull()) {
         return false;
-    } else if (this.isEmpty()) {
-        this.tail = 0;
-        this.head = 0;
-        this.que[0] = value;
-        return true;
     } else {
-        this.tail = this._next(this.tail);
-        this.que[this.tail] = value;
+        this.count += 1;
+        this.que[this.tail()] = value;
         return true;
     }
 };
@@ -37,12 +32,8 @@ MyCircularQueue.prototype.deQueue = function() {
     if (this.isEmpty()) {
         return false;
     } else {
-        if (this.head === this.tail) {
-            this.head = -1;
-            this.tail = -1;
-        } else {
-            this.head = this._next(this.head);   
-        }
+        this.count -= 1;
+        this.head = (this.head + 1) % this.size;
         return true;
     }
 };
@@ -66,16 +57,11 @@ MyCircularQueue.prototype.Rear = function() {
     if (this.isEmpty()) {
         return -1;
     }
-    return this.que[this.tail];
+    return this.que[this.tail()];
 };
 
-MyCircularQueue.prototype._next = function(index) {
-    var next = index + 1;
-    if (next === this.size) {
-        return 0;
-    } else {
-        return next;
-    }
+MyCircularQueue.prototype.tail = function() {
+    return (this.head + this.count - 1) % this.size;
 };
 
 /**
@@ -83,7 +69,7 @@ MyCircularQueue.prototype._next = function(index) {
  * @return {boolean}
  */
 MyCircularQueue.prototype.isEmpty = function() {
-    return this.head === -1 && this.tail === -1;
+    return this.count === 0;
 };
 
 /**
@@ -91,10 +77,7 @@ MyCircularQueue.prototype.isEmpty = function() {
  * @return {boolean}
  */
 MyCircularQueue.prototype.isFull = function() {
-    if (this.isEmpty()) {
-        return false;
-    }
-    return this._next(this.tail) === this.head;
+    return this.count === this.size;
 };
 
 module.exports = MyCircularQueue;
