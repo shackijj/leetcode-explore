@@ -87,16 +87,20 @@ function createGraph(rooms) {
 function findDistanceToGate(room) {
     const queue = [room];
     let step = 0;
+    const visited = new Set();
 
     while (queue.length > 0) {
         const size = queue.length;
         for (let i = 0; i < size; i++) {
             const cur = queue[0];
+            visited.add(cur);
             if (cur.value === GATE) {
                 return step;
             }
             cur.neighbors.forEach((node) => {
-                queue.push(node)
+                if (!visited.has(node)) {
+                    queue.push(node)
+                }
             });
             queue.shift();
         }
@@ -127,7 +131,6 @@ function wallsAndGates(rooms) {
 
 /**
  * Can we do better?
- * - the algo enters infinite loop if there is a circuit in a graph
  * - Results are not cached. We should visit a node once
  * - Time and memory are spent on creating a graph
  */
