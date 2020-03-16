@@ -20,5 +20,58 @@ describe('wallsAndGates', () => {
             [0, -1, 3,  4],
         ];
         expect(input).toEqual(expected)
-    })
+    });
+
+    it('will print', () => {
+        const input = [
+            [INF, INF, INF, -1],
+            [INF, -1, INF, -1],
+            [INF, INF, INF, -1],
+            [-1, -1, -1, -1]
+        ];
+
+        wallsAndGates(input);
+
+        const expected = [
+            [INF, INF, INF, -1],
+            [INF, -1, INF, -1],
+            [INF, INF, INF, -1],
+            [-1, -1, -1, -1]
+        ];
+        expect(input).toEqual(expected)
+    });
+
+    it('will print', () => {
+        const input = [
+            [0, INF, -1],
+            [INF, INF, 0],
+            [INF, INF, INF],
+        ];
+
+        wallsAndGates(input);
+
+        const expected = [
+            [0, 1, -1],
+            [1, 1, 0],
+            [2, 2, 1],
+        ];
+        expect(input).toEqual(expected)
+    });
+
+    it('will print', () => {
+        const input = [
+            [-1, -1, -1],
+            [-1, INF, -1],
+            [-1, -1, -1],
+        ];
+
+        wallsAndGates(input);
+
+        const expected = [
+            [-1, -1, -1],
+            [-1, INF, -1],
+            [-1, -1, -1],
+        ];
+        expect(input).toEqual(expected)
+    });
 });

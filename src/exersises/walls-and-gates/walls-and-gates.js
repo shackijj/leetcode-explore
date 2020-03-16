@@ -118,9 +118,18 @@ function wallsAndGates(rooms) {
         // find shortest path to the nearest gate
         const distanceToGate = findDistanceToGate(room);
         // modify value in array
-        rooms[room.row][room.column] = distanceToGate;
+        if (distanceToGate !== -1) {
+            room.value = distanceToGate;
+            rooms[room.row][room.column] = distanceToGate;
+        }
     });
-    console.log(rooms);
 }
+
+/**
+ * Can we do better?
+ * - the algo enters infinite loop if there is a circuit in a graph
+ * - Results are not cached. We should visit a node once
+ * - Time and memory are spent on creating a graph
+ */
 
 module.exports = wallsAndGates;
