@@ -3,7 +3,7 @@ const wallsAndGates = require('./walls-and-gates');
 const INF = 2147483647;
 
 describe('wallsAndGates', () => {
-    it('will print', () => {
+    it('case 1', () => {
         const input = [
             [INF, -1, 0, INF],
             [INF, INF, INF, -1],
@@ -22,7 +22,7 @@ describe('wallsAndGates', () => {
         expect(input).toEqual(expected)
     });
 
-    it('will print', () => {
+    it('case 2', () => {
         const input = [
             [INF, INF, INF, -1],
             [INF, -1, INF, -1],
@@ -41,7 +41,7 @@ describe('wallsAndGates', () => {
         expect(input).toEqual(expected)
     });
 
-    it('will print', () => {
+    it('case 3', () => {
         const input = [
             [0, INF, -1],
             [INF, INF, 0],
@@ -58,7 +58,7 @@ describe('wallsAndGates', () => {
         expect(input).toEqual(expected)
     });
 
-    it('will print', () => {
+    it('case 4', () => {
         const input = [
             [-1, -1, -1],
             [-1, INF, -1],

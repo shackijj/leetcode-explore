@@ -34,19 +34,19 @@ function Node(value, row, column) {
 
 function getNeighbors(node, grid) {
     const neighbors = [];
-    if (node.row > 0) {
+    if (node.row > 0 && grid[node.row - 1][node.column].value !== WALL) {
         neighbors.push(grid[node.row - 1][node.column]);
     }
 
-    if (node.row < grid.length - 1) {
+    if (node.row < grid.length - 1 && grid[node.row + 1][node.column].value !== WALL) {
         neighbors.push(grid[node.row + 1][node.column]);
     }
 
-    if (node.column > 0) {
+    if (node.column > 0 && grid[node.row][node.column - 1].value !== WALL) {
         neighbors.push(grid[node.row][node.column - 1])
     }
 
-    if (node.column < grid[0].length - 1) {
+    if (node.column < grid[0].length - 1 && grid[node.row][node.column + 1].value !== WALL) {
         neighbors.push(grid[node.row][node.column + 1])
     }
 
@@ -91,6 +91,9 @@ function findDistanceToGate(room) {
 
     while (queue.length > 0) {
         const size = queue.length;
+        let leastValue = INF;
+        let allVisited = true;
+
         for (let i = 0; i < size; i++) {
             const cur = queue[0];
             visited.add(cur);
@@ -98,11 +101,21 @@ function findDistanceToGate(room) {
                 return step;
             }
             cur.neighbors.forEach((node) => {
+                if (node.value === INF) {
+                    allVisited = false;
+                } else {
+                    if (node.value < leastValue) {
+                        leastValue = node.value;
+                    }
+                }
                 if (!visited.has(node)) {
                     queue.push(node)
                 }
             });
             queue.shift();
+        }
+        if (allVisited && leastValue < INF) {
+            return leastValue + step + 1
         }
         step += 1;
     }
@@ -132,6 +145,8 @@ function wallsAndGates(rooms) {
 /**
  * Can we do better?
  * - Results are not cached. We should visit a node once
+ *  - idea of stopping the search once all neighbors of the level are visited
+ *  Can we visit a node once?
  * - Time and memory are spent on creating a graph
  */
 
