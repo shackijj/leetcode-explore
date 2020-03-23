@@ -22,132 +22,65 @@ After running your function, the 2D grid should be:
   0  -1   3   4 */
 
 var INF = 2147483647;
-var WALL = -1;
 var GATE = 0;
 
-function Node(value, row, column) {
-    this.value = value;
-    this.row = row;
-    this.column = column
-    this.neighbors = [];
-}
-
-function getNeighbors(node, grid) {
+function getUnvisitedNeighbors(rooms, rowIdx, colIdx) {
     const neighbors = [];
-    if (node.row > 0 && grid[node.row - 1][node.column].value !== WALL) {
-        neighbors.push(grid[node.row - 1][node.column]);
+    // top
+    if (rooms[rowIdx - 1] && rooms[rowIdx - 1][colIdx] === INF) {
+        neighbors.push([rowIdx - 1, colIdx]);
+    }
+    // right
+    if (rooms[rowIdx][colIdx + 1] === INF) {
+        neighbors.push([rowIdx, colIdx + 1]);
     }
 
-    if (node.row < grid.length - 1 && grid[node.row + 1][node.column].value !== WALL) {
-        neighbors.push(grid[node.row + 1][node.column]);
+    // bottom
+    if (rooms[rowIdx + 1] && rooms[rowIdx + 1][colIdx] === INF) {
+        neighbors.push([rowIdx + 1, colIdx]);
     }
 
-    if (node.column > 0 && grid[node.row][node.column - 1].value !== WALL) {
-        neighbors.push(grid[node.row][node.column - 1])
+    // left
+    if (rooms[rowIdx][colIdx - 1] === INF) {
+        neighbors.push([rowIdx, colIdx - 1]);
     }
-
-    if (node.column < grid[0].length - 1 && grid[node.row][node.column + 1].value !== WALL) {
-        neighbors.push(grid[node.row][node.column + 1])
-    }
-
-
     return neighbors;
 }
 
 /**
- * @param {number[][]} rooms
- * @return {[Nodes[], Node[]]}
- */
-function createGraph(rooms) {
-    // map grid to Node[][]
-    const nodes = rooms.map((row, rowIndex) => {
-        return row.map((cell, cellIndex) => new Node(cell, rowIndex, cellIndex))
-    })
-    const listOfRooms = [];
-    const listOfNodes = [];
-
-    nodes.forEach((row) => {
-        row.forEach((node) => {
-            if (node.value !== WALL) {
-                listOfNodes.push(node);
-                node.neighbors = getNeighbors(node, nodes);
-            }
-            if (node.value === INF) {
-                listOfRooms.push(node);
-            }
-        });
-    });
-    return listOfRooms;
-}
-
-/**
- * @param {Node[]} nodes
- * @param {Node[]} room
- */
-function findDistanceToGate(room) {
-    const queue = [room];
-    let step = 0;
-    const visited = new Set();
-
-    while (queue.length > 0) {
-        const size = queue.length;
-        let leastValue = INF;
-        let allVisited = true;
-
-        for (let i = 0; i < size; i++) {
-            const cur = queue[0];
-            visited.add(cur);
-            if (cur.value === GATE) {
-                return step;
-            }
-            cur.neighbors.forEach((node) => {
-                if (node.value === INF) {
-                    allVisited = false;
-                } else {
-                    if (node.value < leastValue) {
-                        leastValue = node.value;
-                    }
-                }
-                if (!visited.has(node)) {
-                    queue.push(node)
-                }
-            });
-            queue.shift();
-        }
-        if (allVisited && leastValue < INF) {
-            return leastValue + step + 1
-        }
-        step += 1;
-    }
-
-    return INF;
-}
-
-/**
+ * O(m*n)
  * @param {number[][]} rooms
  * @return {void} Do not return anything, modify rooms in-place instead.
  */
 function wallsAndGates(rooms) {
-    // create the graph
-    const emptyRooms = createGraph(rooms);
-    // for every room
-    emptyRooms.forEach((room) => {
-        // find shortest path to the nearest gate
-        const distanceToGate = findDistanceToGate(room);
-        // modify value in array
-        if (distanceToGate !== -1) {
-            room.value = distanceToGate;
-            rooms[room.row][room.column] = distanceToGate;
-        }
+    let step = 0;
+    const que = [];
+    rooms.forEach((row, rowIdx) => {
+        row.forEach((col, colIdx) => {
+            if (col === GATE) {
+                const neighbors = getUnvisitedNeighbors(rooms, rowIdx, colIdx);
+                neighbors.forEach(neighbor => {
+                    que.push(neighbor);
+                })
+            }
+        });
     });
-}
 
-/**
- * Can we do better?
- * - Results are not cached. We should visit a node once
- *  - idea of stopping the search once all neighbors of the level are visited
- *  Can we visit a node once?
- * - Time and memory are spent on creating a graph
- */
+    while(que.length !== 0) {
+        step += 1;
+        let size = que.length;
+        for(let i = 0; i < size; i++) {
+            const room = que.shift();
+            const [rowIdx, colIdx] = room;
+            if (rooms[rowIdx][colIdx] === INF) {
+                rooms[rowIdx][colIdx] = step;
+                const neighbors = getUnvisitedNeighbors(rooms, rowIdx, colIdx);
+                neighbors.forEach(neighbor => {
+                    que.push(neighbor);
+                });
+            }
+        }
+    }
+}
 
 module.exports = wallsAndGates;

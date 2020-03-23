@@ -19,6 +19,7 @@ describe('wallsAndGates', () => {
             [1, -1, 2, -1],
             [0, -1, 3,  4],
         ];
+
         expect(input).toEqual(expected)
     });
 
