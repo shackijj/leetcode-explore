@@ -20,6 +20,9 @@ function DFS(rooms, r, c, rowLen, colLen) {
 function numIslands(rooms) {
     let num = 0;
     let rowLen = rooms.length;
+    if (rowLen <= 0) {
+        return num;
+    }
     let colLen = rooms[0].length;
     for (let r = 0; r < rowLen; r++) {
         for (let c = 0; c < colLen; c++) {
