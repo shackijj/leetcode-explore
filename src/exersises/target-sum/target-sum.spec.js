@@ -22,4 +22,12 @@ describe('target-sum', () => {
         // expect(findTargetSumWays([1, 1, 2, 2], 0)).toEqual(2);
         // expect(findTargetSumWays([1, 1, 2, 2], 2)).toEqual(2);
     });
+
+    it('case 6', () => {
+        expect(findTargetSumWays([1, 1, 1, 1], 0)).toEqual(6);
+    });
+
+    it('case 7', () => {
+        expect(findTargetSumWays(Array(20).fill(1), 20)).toEqual(1);
+    });
 });
