@@ -1,6 +1,10 @@
 const findTargetSumWays = require('./target-sum');
 
 describe('target-sum', () => {
+    it('case 0', () => {
+        expect(findTargetSumWays([1], 1)).toEqual(1);
+        expect(findTargetSumWays([1], -1)).toEqual(1);
+    });
     it('case 1', () => {
         expect(findTargetSumWays([1, 1, 1, 1, 1], 3)).toEqual(5);
     });
