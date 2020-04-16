@@ -1,4 +1,12 @@
-const findTargetSumWays = require('./target-sum');
+const {findTargetSumWays, factorial} = require('./target-sum');
+
+describe('factorial', () => {
+    it('should count factorial', () => {
+        expect(factorial(1)).toBe(1);
+        expect(factorial(2)).toBe(2);
+        expect(factorial(3)).toBe(6);
+    });
+});
 
 describe('target-sum', () => {
     it('case 0', () => {
