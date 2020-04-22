@@ -11,4 +11,15 @@ describe('inorderTraversal', () => {
 
         expect(inorderTraversal(root)).toEqual([1, 3, 2]);
     });
+
+    it('case 1', () => {
+        const root = new TreeNode(1);
+        const l1Left = new TreeNode(2);
+        const l1Right = new TreeNode(3);
+
+        root.right = l1Right;
+        root.left = l1Left;
+
+        expect(inorderTraversal(root)).toEqual([2, 1, 3]);
+    });
 });

@@ -6,28 +6,13 @@
 var twoSum = function(nums, target) {
     var map = new Map();
     // o(n)
-    nums.forEach((num, idx) => {
-        var ary = map.get(num)
-        if (ary) {
-            ary.push(idx)
+    for (var i = 0; i < nums.length; i++) {
+        var num = nums[i];
+        var found = map.get(target - num);
+        if (found >= 0) {
+            return [found, i];
         } else {
-            map.set(num, [idx]);
-        }
-    });
-
-    // o(n)
-    for (let i = 0; i < nums.length; i++) {
-        const cur = nums[i];
-        const diff = target - cur;
-
-        const indices = map.get(diff);
-        if (indices) {
-            // O(2) since indices are unique
-            for (idx of indices) {
-                if (idx !== i) {
-                    return [i, idx]
-                }
-            }
+            map.set(num, i);
         }
     }
 };
