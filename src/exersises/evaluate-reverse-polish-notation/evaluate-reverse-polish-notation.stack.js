@@ -21,16 +21,22 @@ function Value(val) {
     this.val = parseInt(val);
 }
 
-function last(ary) {
-    return ary[ary.length - 1];
+function findNotFilled(stack) {
+    for (let i = stack.length - 1; i >= 0; i--) {
+        const cur = stack[i];
+        if (cur.lhs === null || cur.rhs === null) {
+            return cur;
+        }
+    }
 }
 
 /**
+ * TODO: use stack for storing unfilled operations
  * @param {string[]} tokens
  * @return {number}
  */
 var evalRPN = function(tokens) {
-    const stack = [];
+    const operations = [];
     const added = new Set();
     
     let cur;
@@ -41,7 +47,7 @@ var evalRPN = function(tokens) {
                 cur = new Op(token);
             } else {
                 if (!added.has(cur)) {
-                    stack.push(cur);
+                    operations.push(cur);
                     added.add(cur);
                 }
 
@@ -59,9 +65,9 @@ var evalRPN = function(tokens) {
                 cur.rhs = val;
             } else {
                 cur.lhs = val;
-                prev = last(stack);
+                prev = findNotFilled(operations);
                 if (!added.has(cur)) {
-                    stack.push(cur);
+                    operations.push(cur);
                     added.add(cur);
                 }
                 cur = prev;
@@ -69,11 +75,7 @@ var evalRPN = function(tokens) {
         }
     }
 
-    console.log(stack);
+    console.log(operations);
 };
-
-
-// think of (4 * 3) + (5 * 2)
-// 3 4 * 2 5 * +
 
 module.exports = evalRPN;
