@@ -11,21 +11,38 @@ function isOp(op) {
 }
 
 
-function Op(op) {
+function Op(op, prev) {
     this.lhs = null;
     this.rhs = null;
     this.op = op;
+    this.prev = prev;
 }
+
+Op.prototype.do = function doOp() {
+    switch (this.op) {
+        case '+':
+            return this.lhs.val + this.rhs.val;
+        case '-':
+            return this.lhs.val - this.rhs.val;
+        case '*':
+            return this.lhs.val * this.rhs.val;
+        case '/':
+            return parseInt(this.lhs.val / this.rhs.val);
+        default:
+            throw new Error('unknown op');
+    }
+};
 
 function Value(val) {
     this.val = parseInt(val);
 }
 
-function findNotFilled(stack) {
-    for (let i = stack.length - 1; i >= 0; i--) {
-        const cur = stack[i];
-        if (cur.lhs === null || cur.rhs === null) {
-            return cur;
+function findPrevNotFilled(op) {
+    while(op) {
+        if (op.lhs === null || op.rhs === null) {
+            return op
+        } else {
+            op = op.prev;
         }
     }
 }
@@ -37,7 +54,6 @@ function findNotFilled(stack) {
  */
 var evalRPN = function(tokens) {
     const operations = [];
-    const added = new Set();
     
     let cur;
     while(tokens.length !== 0) {
@@ -45,37 +61,45 @@ var evalRPN = function(tokens) {
         if (isOp(token)) {
             if (!cur) {
                 cur = new Op(token);
+                operations.push(cur);
             } else {
-                if (!added.has(cur)) {
-                    operations.push(cur);
-                    added.add(cur);
-                }
-
                 if (!cur.rhs) {
-                    cur.rhs = new Op(token);
+                    cur.rhs = new Op(token, cur);
+                    operations.push(cur.rhs);
                     cur = cur.rhs;
                 } else {
-                    cur.lhs = new Op(token);
+                    cur.lhs = new Op(token, cur);
+                    operations.push(cur.lhs);
                     cur = cur.lhs;
                 }
             }
         } else {
             const val = new Value(token);
+            if (!cur) {
+                return val.val;
+            }
             if (!cur.rhs) {
                 cur.rhs = val;
             } else {
                 cur.lhs = val;
-                prev = findNotFilled(operations);
-                if (!added.has(cur)) {
-                    operations.push(cur);
-                    added.add(cur);
-                }
+                prev = findPrevNotFilled(cur);
                 cur = prev;
             }
         }
     }
 
-    console.log(operations);
+    while(operations.length !== 0) {
+        const curOp = operations.pop();
+        const prev = curOp.prev;
+        if (!prev) {
+            return curOp.do();
+        }
+        if (prev.lhs === curOp) {
+            prev.lhs = new Value(curOp.do());
+        } else if (prev.rhs === curOp) {
+            prev.rhs = new Value(curOp.do());
+        }
+    }
 };
 
 module.exports = evalRPN;
