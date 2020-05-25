@@ -1,4 +1,4 @@
-const evalRPN = require('./evaluate-reverse-polish-notation.stack');
+const evalRPN = require('./evaluate-reverse-polish-notation.stack-only');
 
 describe('evalRPN', () => {
     it('will return a number', () => {
