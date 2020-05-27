@@ -1,12 +1,4 @@
-const {findTargetSumWays, factorial} = require('./target-sum');
-
-describe('factorial', () => {
-    it('should count factorial', () => {
-        expect(factorial(1)).toBe(1);
-        expect(factorial(2)).toBe(2);
-        expect(factorial(3)).toBe(6);
-    });
-});
+const {findTargetSumWays} = require('./target-sum');
 
 describe('target-sum', () => {
     it('case 0', () => {
@@ -31,8 +23,6 @@ describe('target-sum', () => {
 
     it('case 5', () => {
         expect(findTargetSumWays([1, 1, 2, 2], 6)).toEqual(1);
-        // expect(findTargetSumWays([1, 1, 2, 2], 0)).toEqual(2);
-        // expect(findTargetSumWays([1, 1, 2, 2], 2)).toEqual(2);
     });
 
     it('case 6', () => {
