@@ -1,20 +1,22 @@
 var mod10 = (num) => num >= 0 ? num % 10 : ((num * -1) % 10) * -1 + 10
 
+var join = (a, b, c, d) => `${a}${b}${c}${d}`;
+
 function generateMoves(next) {
-    const first = parseInt(next[0]);
-    const second = parseInt(next[1]);
-    const third = parseInt(next[2]);
-    const fourth = parseInt(next[3]);
+    const first = Number(next[0]);
+    const second = Number(next[1]);
+    const third = Number(next[2]);
+    const fourth = Number(next[3]);
     return [
-        [mod10(first + 1), second, third, fourth],
-        [mod10(first - 1), second, third, fourth],
-        [first, mod10(second + 1), third, fourth],
-        [first, mod10(second - 1), third, fourth],
-        [first, second, mod10(third + 1), fourth],
-        [first, second, mod10(third - 1), fourth],
-        [first, second, third, mod10(fourth - 1)],
-        [first, second, third, mod10(fourth + 1)],
-    ].map((next) => next.join(''));
+        join(mod10(first + 1), second, third, fourth),
+        join(mod10(first - 1), second, third, fourth),
+        join(first, mod10(second + 1), third, fourth),
+        join(first, mod10(second - 1), third, fourth),
+        join(first, second, mod10(third + 1), fourth),
+        join(first, second, mod10(third - 1), fourth),
+        join(first, second, third, mod10(fourth - 1)),
+        join(first, second, third, mod10(fourth + 1)),
+    ];
 }
 
 /**
