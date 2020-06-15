@@ -8,12 +8,11 @@ class Solution:
 
         while len(stack) != 0:
             next_key = stack.pop()
-            if next_key not in target:
-                target.add(next_key)
-                new_keys = rooms[next_key]
-                for key in new_keys:
-                    if key not in target:
-                        stack.append(key)
+            target.add(next_key)
+            new_keys = rooms[next_key]
+            for key in new_keys:
+                if key not in target:
+                    stack.append(key)
         
         if (len(target) == len(rooms)):
             return True
