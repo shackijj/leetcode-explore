@@ -2,7 +2,7 @@ import math
 from collections import deque
 
 class Solution:
-    def findAllSquaresLEQ(self, n: int) -> [int]:
+    def findAllSquaresLEQ(self, n: int) -> {int}:
         return {x * x for x in range(1, int(math.sqrt(n)) + 1)}
     def numSquares(self, n: int) -> int:
         allSquares = self.findAllSquaresLEQ(n)
